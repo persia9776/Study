@@ -100,7 +100,10 @@ input[type=time]{width:104px !important}
 </section>
 
 <section id="p1" class="hide">
- <div class="card"><h2>روند مطالعه</h2>
+ <div class="card"><h2>روند کلی (روزانه)</h2><div id="l1"></div>
+  <div class="sub" id="l1n" style="margin:4px 0 0">هر نقطه مجموع ساعت مطالعه‌ی ۱۴ روزی است که از تاریخ زیر آن شروع می‌شود. آخرین نقطه، ۱۴ روز اخیر است.</div></div>
+ 
+ <div class="card"><h2>روند مطالعه (۷ روز + پیش‌بینی)</h2>
   <div class="row"><button class="chip on" data-m="d">روزانه</button></div>
   <div id="ch"></div><div id="lg" class="row" style="margin-top:8px"></div>
  </div>
@@ -108,15 +111,16 @@ input[type=time]{width:104px !important}
   <div class="sub" id="ps" style="margin:0 0 8px"></div>
   <div class="row"><select id="pdD"></select><select id="pdM"></select><select id="pdY"></select></div>
   <div class="row"><button class="btn" id="psv">ثبت شروع دوره‌ی اول</button><button class="btn g" id="prs">حالت خودکار</button></div></div>
- <div class="card"><h2>روند کلی (روزانه)</h2><div id="l1"></div>
-  <div class="sub" id="l1n" style="margin:4px 0 0">هر نقطه مجموع ساعت مطالعه‌ی ۱۴ روزی است که از تاریخ زیر آن شروع می‌شود. آخرین نقطه، ۱۴ روز اخیر است.</div></div>
+ <div class="card"><h2>ساعات مطالعه در شبانه‌روز</h2>
+  <div class="row" style="justify-content:space-between"><button class="btn g" id="hrp">›</button><b id="hrl"></b><button class="btn g" id="hrn">‹</button></div>
+  <div id="hrc"></div><div class="sub" id="hrt" style="margin:4px 0 0"></div></div>
  <div class="card"><h2>مقایسه‌ی دروس در ۲ هفته (ساعت در هر روز)</h2>
   <div class="row" style="justify-content:space-between"><button class="btn g" id="lo">›</button><b id="lr"></b><button class="btn g" id="ln2">‹</button></div>
   <div id="l2"></div><div id="l2g" class="row" style="margin-top:8px"></div>
   <div class="sub" style="margin:4px 0 0">روی نام هر درس بزن تا خطش پنهان یا نمایان شود.</div></div>
- <div class="card"><h2>نمودار عنکبوتی مطالعه‌ی روزانه</h2>
+ <div class="card"><h2>سهم دروس در روز (دایره‌ای)</h2>
   <div class="row" style="justify-content:space-between"><button class="btn g" id="po">›</button><b id="pl"></b><button class="btn g" id="pn">‹</button></div>
-  <div id="pc" style="max-width:240px;margin:0 auto"></div><div id="pg"></div></div>
+  <div id="pc" style="max-width:260px;margin:0 auto"></div><div id="pg"></div></div>
  <div class="card"><h2>تقویم مطالعه (۱۲ هفته)</h2><div id="hm"></div><div class="sub" id="hs" style="margin:6px 0 0"></div>
   <div class="sub" style="margin:2px 0 0">هر ستون یک هفته (شنبه تا جمعه) است. پررنگ‌تر یعنی مطالعه‌ی بیشتر.</div></div>
  <div class="card"><h2>بهترین زمان‌های مطالعه</h2><div id="bh"></div></div>
@@ -258,8 +262,8 @@ function draw(){
  te.slice().reverse().forEach(e=>{const r=document.createElement('div');r.className='it';const dt=[e.k!=null?TY[e.k]:null,e.tp||null,e.r?'★'.repeat(e.r):null].filter(Boolean).join(' · ');r.innerHTML='<span><i class="dot" style="background:'+S[e.s].c+'"></i>'+S[e.s].n+(dt?'<small class="sub" style="display:block;margin:0">'+dt+'</small>':'')+'</span><span>'+hm(e.m)+'</span>';const x=document.createElement('button');x.className='x';x.textContent='✕';x.onclick=()=>{E=E.filter(k=>k.id!==e.id);save();draw()};r.appendChild(x);$('tl').appendChild(r)});
  // chart
  const B=buckets();
- $('ch').innerHTML=combo(B.map(b=>b.l),S.map((s,k)=>({c:s.c,v:B.map(b=>b.v[k]/60)})),B.map(b=>b.t/60));
- $('lg').innerHTML=S.map(s=>'<span><i class="dot" style="background:'+s.c+'"></i>'+s.n+'</span>').join('');
+ $('ch').innerHTML=fcast();
+ $('lg').innerHTML='<span><i class="dot" style="background:#A855F7"></i>مطالعه‌ی روزانه</span><span><i class="dot" style="background:#FBBF24"></i>میانگین و پیش‌بینی</span>';
  // month
  let lab,ok,TL;
  if(mt==='c'){const k0=C||dk(new Date()),k1=dk(new Date());lab='از '+jl(pk(k0))+' تا امروز';TL='مجموع این بازه';ok=e=>e.d>=k0&&e.d<=k1}
@@ -269,7 +273,7 @@ function draw(){
  const tot=S.map(()=>0);E.forEach(e=>{if(ok(e))tot[e.s]+=e.m});
  const mm=Math.max(1,...tot),sum=tot.reduce((a,c)=>a+c,0);
  $('mt').innerHTML=S.map((s,i)=>'<div style="margin:10px 0"><div class="row" style="justify-content:space-between;margin:0"><span><i class="dot" style="background:'+s.c+'"></i>'+s.n+'</span><b>'+(tot[i]?hm(tot[i]):'۰')+'</b></div><div class="bar"><i style="width:'+tot[i]/mm*100+'%;background:'+s.c+'"></i></div></div>').join('')+'<div class="it"><span>'+TL+'</span><b>'+(sum?hm(sum):'۰')+'</b></div>';
- drawLines();drawPie();drawGoals();drawSleep();drawExtras();drawHero();drawHome();
+ drawLines();drawPie();drawGoals();drawSleep();drawExtras();drawHero();drawHome();drawHours();
  // notes
  }
 let w2=0;const hid=new Set();
@@ -543,20 +547,61 @@ function lc(ser,lab,H,vl){
 }
 
 let pd=0;
+
+function fcast(){
+ const t=new Date();t.setHours(12);const dm={};E.forEach(e=>{dm[e.d]=(dm[e.d]||0)+e.m});
+ const d7=[];for(let j=6;j>=0;j--)d7.push(addD(t,-j));
+ const v=d7.map(d=>(dm[dk(d)]||0)/60);
+ const avg=v.reduce((a,c)=>a+c,0)/7;
+ const W=340,L=30,R=12,T=18,Bm=30,H=200,n=8,bw=(W-L-R)/n,X=i=>L+bw*i+bw/2;
+ const mx=Math.max(1,...v,avg)*1.25,Y=q=>T+(H-T-Bm)*(1-q/mx);
+ let s='<svg viewBox="0 0 '+W+' '+H+'" style="direction:ltr;overflow:visible"><defs><linearGradient id="fbB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A855F7"/><stop offset="1" stop-color="#6366F1" stop-opacity=".5"/></linearGradient><filter id="fg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+ for(let k=0;k<=4;k++){const q=mx*k/4,yy=Y(q);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#FFFFFF" opacity=".08"/><text x="'+(L-4)+'" y="'+(yy+3)+'" font-size="8" text-anchor="end" fill="#9AA3C7">'+(+q.toFixed(1))+'</text>'}
+ v.forEach((q,i)=>{if(q>0){s+='<rect x="'+(X(i)-bw*.3)+'" y="'+Y(q)+'" width="'+(bw*.6)+'" height="'+(Y(0)-Y(q))+'" rx="5" fill="url(#fbB)"/><text x="'+X(i)+'" y="'+(Y(q)-5)+'" font-size="8" text-anchor="middle" fill="#E6E9F5">'+fa(+q.toFixed(1))+'</text>'}
+  s+='<text x="'+X(i)+'" y="'+(H-10)+'" font-size="8" text-anchor="middle" fill="#9AA3C7">'+fa(jal(d7[i]).d)+'</text>'});
+ s+='<text x="'+X(7)+'" y="'+(H-10)+'" font-size="8" text-anchor="middle" fill="#FBBF24">فردا</text>';
+ s+='<line x1="'+X(0)+'" y1="'+Y(avg)+'" x2="'+X(6)+'" y2="'+Y(avg)+'" stroke="#FBBF24" stroke-width="2" filter="url(#fg)"/>';
+ s+='<line x1="'+X(6)+'" y1="'+Y(avg)+'" x2="'+X(7)+'" y2="'+Y(avg)+'" stroke="#FBBF24" stroke-width="2" stroke-dasharray="5 4" filter="url(#fg)"/>';
+ s+='<circle cx="'+X(7)+'" cy="'+Y(avg)+'" r="4.5" fill="#0B1020" stroke="#FBBF24" stroke-width="2.5"/><text x="'+X(7)+'" y="'+(Y(avg)-9)+'" font-size="9" font-weight="700" text-anchor="middle" fill="#FBBF24">'+fa(+avg.toFixed(1))+'</text>';
+ s+='<text x="'+X(0)+'" y="'+(Y(avg)-7)+'" font-size="8" fill="#FBBF24">میانگین ۷ روز: '+fa(+avg.toFixed(1))+' ساعت</text>';
+ return s+'</svg>';
+}
+let hdy=0;
+function drawHours(){
+ const t=new Date();t.setHours(12);const k=dk(addD(t,-hdy));
+ const hv=Array(24).fill(0);
+ E.forEach(e=>{if(e.d!==k||e.t==null||!(e.m>0))return;let cur=e.t,rem=e.m,guard=0;
+  while(rem>0&&guard++<100){const fl=Math.floor(cur),hr=((fl%24)+24)%24;const can=Math.min(rem,(fl+1-cur)*60);if(can<=0){cur=fl+1;continue}hv[hr]+=can;rem-=can;cur+=can/60}});
+ const vals=hv.map(x=>x/60),mx=Math.max(1,...vals)*1.25;
+ const W=340,L=28,R=6,T=16,B=24,H=180,bw=(W-L-R)/24,X=i=>L+bw*i+bw/2,Y=q=>T+(H-T-B)*(1-q/mx);
+ let s='<svg viewBox="0 0 '+W+' '+H+'" style="direction:ltr;overflow:visible"><defs><linearGradient id="hgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22D3EE"/><stop offset="1" stop-color="#A855F7" stop-opacity=".6"/></linearGradient></defs>';
+ for(let q=0;q<=2;q++){const yy=Y(mx*q/2);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#FFFFFF" opacity=".08"/><text x="'+(L-4)+'" y="'+(yy+3)+'" font-size="8" text-anchor="end" fill="#9AA3C7">'+(+(mx*q/2).toFixed(1))+'</text>'}
+ vals.forEach((q,i)=>{if(q>0)s+='<rect x="'+(X(i)-bw*.35)+'" y="'+Y(q)+'" width="'+(bw*.7)+'" height="'+(Y(0)-Y(q))+'" rx="3" fill="url(#hgB)"/>';
+  if(i%3===0)s+='<text x="'+X(i)+'" y="'+(H-6)+'" font-size="8" text-anchor="middle" fill="#9AA3C7">'+fa(i)+':۰۰</text>'});
+ $('hrc').innerHTML=s+'</svg>';
+ const tot=vals.reduce((a,c)=>a+c,0);
+ $('hrt').textContent=tot?'مجموع این روز: '+hm(Math.round(tot*60))+'. هر ستون یک ساعت از شبانه‌روز است.':'برای این روز مطالعه‌ای با ساعت شروع ثبت نشده. ساعت شروع با تایمر ثبت می‌شود.';
+ const dd=addD(t,-hdy);$('hrl').textContent=hdy===0?'امروز':hdy===1?'دیروز':jl(dd);$('hrn').disabled=hdy===0;
+}
+$('hrp').onclick=()=>{hdy++;drawHours()};
+$('hrn').onclick=()=>{if(hdy>0){hdy--;drawHours()}};
 function drawPie(){
  const d=new Date();d.setHours(12);d.setDate(d.getDate()-pd);const k=dk(d);
  const v=S.map(()=>0);E.forEach(e=>{if(e.d===k)v[e.s]+=e.m});
  const tot=v.reduce((a,c)=>a+c,0);
  $('pl').textContent=pd===0?'امروز':pd===1?'دیروز':jl(d);$('pn').disabled=pd===0;
  if(!tot){$('pc').innerHTML='';$('pg').innerHTML='<div class="sub" style="text-align:center">در این روز مطالعه‌ای ثبت نشده.</div>';return}
- const n=S.length,cx=130,cy=130,R=78,mx=Math.max(60,...v);
- const ang=i=>-Math.PI/2+i*2*Math.PI/n;
- const pt=(i,f)=>[cx+R*f*Math.cos(ang(i)),cy+R*f*Math.sin(ang(i))];
- let g='<svg viewBox="0 0 260 260" style="direction:ltr"><defs><linearGradient id="spg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22D3EE" stop-opacity=".75"/><stop offset="1" stop-color="#A855F7" stop-opacity=".6"/></linearGradient></defs>';
- for(let q=1;q<=4;q++){g+='<polygon points="'+S.map((_,i)=>pt(i,q/4).join(',')).join(' ')+'" fill="none" stroke="#FFFFFF" opacity=".15"/>'}
- S.forEach((_,i)=>{const p=pt(i,1);g+='<line x1="'+cx+'" y1="'+cy+'" x2="'+p[0]+'" y2="'+p[1]+'" stroke="#FFFFFF" opacity=".15"/>'});
- g+='<polygon points="'+S.map((_,i)=>pt(i,v[i]/mx).join(',')).join(' ')+'" fill="url(#spg)" stroke="#22D3EE" stroke-width="2.5" stroke-linejoin="round"/>';
- S.forEach((sj,i)=>{const p=pt(i,v[i]/mx);g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="'+sj.c+'" stroke="#fff" stroke-width="1.5"/>';const q=pt(i,1.22);g+='<text x="'+q[0]+'" y="'+(q[1]+3)+'" font-size="8.5" text-anchor="middle" fill="#E6E9F5">'+sj.n+'</text>'});
+ const cx=130,cy=130,R=100,r=64;
+ const P=(ang,rad)=>[cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)];
+ let g='<svg viewBox="0 0 260 260" style="direction:ltr;overflow:visible"><defs><filter id="pg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+ let a0=-Math.PI/2;
+ v.forEach((m,i)=>{if(!m)return;const f=m/tot,a1=a0+f*2*Math.PI;
+  if(f>=.9999){g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+((R+r)/2)+'" fill="none" stroke="'+S[i].c+'" stroke-width="'+(R-r)+'" filter="url(#pg)"/>'}
+  else{const p1=P(a0,R),p2=P(a1,R),q1=P(a1,r),q2=P(a0,r),lg=f>.5?1:0;
+   g+='<path d="M'+p1+' A'+R+' '+R+' 0 '+lg+' 1 '+p2+' L'+q1+' A'+r+' '+r+' 0 '+lg+' 0 '+q2+' Z" fill="'+S[i].c+'" stroke="#12152A" stroke-width="2" filter="url(#pg)"/>'}
+  if(f>=.06){const tp=P((a0+a1)/2,(R+r)/2);g+='<text x="'+tp[0]+'" y="'+(tp[1]+4)+'" font-size="11" font-weight="700" text-anchor="middle" fill="#0B1020">'+fa(Math.round(f*100))+'٪</text>'}
+  a0=a1});
+ g+='<text x="'+cx+'" y="'+(cy+2)+'" font-size="18" font-weight="700" text-anchor="middle" fill="#E6E9F5">'+fa(+(tot/60).toFixed(1))+' ساعت</text><text x="'+cx+'" y="'+(cy+20)+'" font-size="10" text-anchor="middle" fill="#9AA3C7">مجموع روز</text>';
  $('pc').innerHTML=g+'</svg>';
  $('pg').innerHTML=S.map((x,i)=>v[i]?'<div class="it"><span><i class="dot" style="background:'+x.c+'"></i>'+x.n+'</span><span>'+hm(v[i])+' ('+fa(Math.round(v[i]/tot*100))+'٪)</span></div>':'').join('')+'<div class="it"><span>مجموع روز</span><b>'+hm(tot)+'</b></div>';
 }
