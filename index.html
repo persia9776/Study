@@ -87,6 +87,11 @@ select,input,textarea{background:#1B1834;color:var(--tx);border-color:#3B3670}
 #bn{background:#120F26}
 #bn button.on{background:linear-gradient(90deg,rgba(34,211,238,.28),rgba(168,85,247,.28))}
 #bn button{color:#8F8BC0}
+
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kpi{background:linear-gradient(160deg,#2B2758,#1E1B3B);border-radius:18px;padding:12px 14px;border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 22px rgba(5,4,20,.35)}
+.kl{font-size:11px;color:var(--mu)}
+.kv{font-size:20px;font-weight:700;margin-top:4px;color:#fff}
 </style>
 </head>
 <body>
@@ -125,17 +130,17 @@ select,input,textarea{background:#1B1834;color:var(--tx);border-color:#3B3670}
  <div class="card"><h2>روند کلی (روزانه)</h2><div id="l1"></div>
   <div class="sub" id="l1n" style="margin:4px 0 0">هر نقطه مجموع ساعت مطالعه‌ی ۱۴ روزی است که از تاریخ زیر آن شروع می‌شود. آخرین نقطه، ۱۴ روز اخیر است.</div></div>
  
- <div class="card"><h2>روند مطالعه (۷ روز + پیش‌بینی)</h2>
+ <div hidden><div class="card"><h2>روند مطالعه (۷ روز + پیش‌بینی)</h2>
   <div class="row"><button class="chip on" data-m="d">روزانه</button></div>
   <div id="ch"></div><div id="lg" class="row" style="margin-top:8px"></div>
  </div>
+ </div><div class="card"><h2>ساعات مطالعه در شبانه‌روز</h2>
+  <div class="row" style="justify-content:space-between"><button class="btn g" id="hrp">›</button><b id="hrl"></b><button class="btn g" id="hrn">‹</button></div>
+  <div id="hrc"></div><div class="sub" id="hrt" style="margin:4px 0 0"></div></div>
  <div class="card"><h2>تنظیم دوره‌های ۲ هفته‌ای</h2>
   <div class="sub" id="ps" style="margin:0 0 8px"></div>
   <div class="row"><select id="pdD"></select><select id="pdM"></select><select id="pdY"></select></div>
   <div class="row"><button class="btn" id="psv">ثبت شروع دوره‌ی اول</button><button class="btn g" id="prs">حالت خودکار</button></div></div>
- <div class="card"><h2>ساعات مطالعه در شبانه‌روز</h2>
-  <div class="row" style="justify-content:space-between"><button class="btn g" id="hrp">›</button><b id="hrl"></b><button class="btn g" id="hrn">‹</button></div>
-  <div id="hrc"></div><div class="sub" id="hrt" style="margin:4px 0 0"></div></div>
  <div class="card"><h2>مقایسه‌ی دروس در ۲ هفته (ساعت در هر روز)</h2>
   <div class="row" style="justify-content:space-between"><button class="btn g" id="lo">›</button><b id="lr"></b><button class="btn g" id="ln2">‹</button></div>
   <div id="l2"></div><div id="l2g" class="row" style="margin-top:8px"></div>
@@ -145,17 +150,22 @@ select,input,textarea{background:#1B1834;color:var(--tx);border-color:#3B3670}
   <div id="pc" style="max-width:260px;margin:0 auto"></div><div id="pr" style="display:flex;flex-wrap:wrap;justify-content:space-around;gap:8px;margin:6px 0"></div><div id="pg"></div></div>
  <div class="card"><h2>تقویم مطالعه (۱۲ هفته)</h2><div id="hm"></div><div class="sub" id="hs" style="margin:6px 0 0"></div>
   <div class="sub" style="margin:2px 0 0">هر ستون یک هفته (شنبه تا جمعه) است. پررنگ‌تر یعنی مطالعه‌ی بیشتر.</div></div>
- <div class="card"><h2>بهترین زمان‌های مطالعه</h2><div id="bh"></div></div>
- <div class="card"><h2>نوع جلسه و مباحث (۳۰ روز اخیر)</h2><div id="tt"></div></div>
+ <div hidden><div class="card"><h2>بهترین زمان‌های مطالعه</h2><div id="bh"></div></div>
+ </div><div class="card"><h2>نوع جلسه و مباحث (۳۰ روز اخیر)</h2><div id="tt"></div></div>
  <div class="card"><h2>تحلیل خواب و مطالعه</h2>
   <div class="row" style="justify-content:space-between"><button class="btn g" id="sp">›</button><b id="sl2" style="font-size:14px"></b><button class="btn g" id="sn">‹</button></div>
   <div id="sa"></div><div id="sc1"></div><div id="sc2"></div></div>
- <div class="card"><h2>جمع مطالعه‌ی هر درس</h2>
+ <div hidden><div class="card"><h2>جمع مطالعه‌ی هر درس</h2>
   <div class="row"><button class="chip" data-t="w">هفتگی</button><button class="chip on" data-t="m">ماهانه</button></div>
   <div class="row hide" id="cr"><span class="sub" style="margin:0">شروع محاسبه:</span><select id="cD"></select><select id="cM"></select><select id="cY"></select></div>
   <div class="row" style="justify-content:space-between"><button class="btn g" id="pm">›</button><b id="mn"></b><button class="btn g" id="nm">‹</button></div>
   <div id="mt"></div>
  </div>
+</div><div class="card"><h2>بازه‌های زمانی دلخواه</h2>
+ <div class="sub" style="margin:0 0 8px">یک بازه‌ی ساعتی بساز (مثلاً ۸ تا ۱۲) تا ببینی در آن ساعت‌ها از هر درس چند ساعت مطالعه کرده‌ای. فقط جلسه‌هایی که ساعت شروع دارند حساب می‌شوند.</div>
+ <div class="row"><input id="bzN" placeholder="نام بازه" style="width:110px"><input id="bzA" type="time"><input id="bzB" type="time"><button class="btn" id="bzAdd">افزودن</button></div>
+ <div class="sub" id="bzM" style="margin:4px 0 0"></div>
+ <div id="bzL"></div></div>
 </section>
 
 
@@ -177,13 +187,19 @@ select,input,textarea{background:#1B1834;color:var(--tx);border-color:#3B3670}
  <div class="card hero"><div class="hl">مطالعه‌ی امروز</div><div class="hv" id="hT">۰</div>
   <div class="hd"><div id="hD"></div><div><div class="hl">پیشرفت هدف هفتگی</div><div class="hs2" id="hW"></div></div></div></div>
  <div class="qa"><button class="qb" data-go="p0">شروع مطالعه</button><button class="qb" data-go="p5">ثبت تست</button><button class="qb" data-go="p3">اهداف</button></div>
- <div class="g2">
  <div class="card"><h2>۷ روز اخیر (ساعت)</h2><div id="hc1"></div></div>
- <div class="card"><h2>سهم دروس این هفته</h2><div id="hc2"></div></div>
+<div class="card"><h2>سهم دروس این هفته</h2><div id="hc2"></div></div>
+<div class="kpis">
+ <div class="kpi"><div class="kl">میانگین روزانه (۷ روز)</div><div class="kv" id="k1"></div></div>
+ <div class="kpi"><div class="kl">روزهای مطالعه (۷ روز)</div><div class="kv" id="k2"></div></div>
+ <div class="kpi"><div class="kl">رگه‌ی مطالعه</div><div class="kv" id="k3"></div></div>
+ <div class="kpi"><div class="kl">دقت تست (۳۰ روز)</div><div class="kv" id="k4"></div></div>
+</div>
+<div class="g2">
  <div class="card"><h2>کیفیت مطالعه <span class="sub" id="hq" style="margin:0 0 0 6px"></span></h2><div id="hc3"></div></div>
  <div class="card"><h2>دقت تست‌ها</h2><div id="hc4"></div></div>
 </div>
- <div class="card"><div class="row" style="justify-content:space-between;margin:0">
+<div class="card"><div class="row" style="justify-content:space-between;margin:0">
    <div><div class="sub" style="margin:0" id="xn"></div><div class="big" id="xc"></div></div>
    <div style="text-align:center"><div class="sub" style="margin:0">رگه‌ی مطالعه</div><div class="big" id="sk"></div></div>
    <button class="btn g" id="xe">تنظیم</button></div>
@@ -295,7 +311,7 @@ function draw(){
  const tot=S.map(()=>0);E.forEach(e=>{if(ok(e))tot[e.s]+=e.m});
  const mm=Math.max(1,...tot),sum=tot.reduce((a,c)=>a+c,0);
  $('mt').innerHTML=S.map((s,i)=>'<div style="margin:10px 0"><div class="row" style="justify-content:space-between;margin:0"><span><i class="dot" style="background:'+s.c+'"></i>'+s.n+'</span><b>'+(tot[i]?hm(tot[i]):'۰')+'</b></div><div class="bar"><i style="width:'+tot[i]/mm*100+'%;background:'+s.c+'"></i></div></div>').join('')+'<div class="it"><span>'+TL+'</span><b>'+(sum?hm(sum):'۰')+'</b></div>';
- drawLines();drawPie();drawGoals();drawSleep();drawExtras();drawHero();drawHome();drawHours();drawStudyTab();
+ drawLines();drawPie();drawGoals();drawSleep();drawExtras();drawHero();drawHome();drawHours();drawStudyTab();drawBZ();
  // notes
  }
 let w2=0;const hid=new Set();
@@ -309,12 +325,12 @@ function drawLines(){
  if(w2>mb)w2=mb;
  const dd=[];for(let j=13;j>=0;j--)dd.push(addD(today,-j));
  const tv=dd.map(d=>{const r=dm[dk(d)];return r?r.reduce((x,c)=>x+c,0)/60:0});
- $("l1").innerHTML=combo(dd.map(d=>fa(jal(d).d)),[{c:"#8FD3FE",v:tv}],tv);
- $("l1n").textContent="مجموع ساعت مطالعه‌ی هر روز در ۱۴ روز اخیر.";
+ $("l1").innerHTML=dailyTrend(dd.map(d=>fa(jal(d).d)),tv);
+ $("l1n").textContent="ستون: مطالعه‌ی هر روز. خط صورتی: میانگین ۷ روز گذشته برای هر نقطه. نقطه‌ی آخر: پیش‌بینی فردا (میانگین ۷ روز اخیر).";
  $("ps").textContent=P?"شروع دوره‌ی اول: "+jl(pk(P))+" "+fa(jal(pk(P)).y)+" (هر ۱۴ روز یک دوره)":"حالت خودکار: دوره‌ی جاری همیشه ۱۴ روز اخیر است.";
  const st2=addD(cs,-14*w2),days=[];for(let j=0;j<14;j++)days.push(addD(st2,j));
  const ser=S.map((s,k)=>({c:s.c,v:days.map(d=>{if(hid.has(k)||d>today)return d>today?null:0;const r=dm[dk(d)];return r?r[k]/60:0})}));
- $("l2").innerHTML=lc(ser,days.map(d=>fa(jal(d).d)),200,false);
+ $("l2").innerHTML=combo(days.map(d=>fa(jal(d).d)),ser.map(se=>({c:se.c,v:se.v.map(x=>x==null?0:x)})),null,200);
  $("lr").textContent=jl(days[0])+" تا "+jl(days[13]);
  $("lo").disabled=w2>=mb;$("ln2").disabled=w2===0;
  const g=$("l2g");g.innerHTML="";
@@ -519,24 +535,6 @@ function askRate(id){const e=E.find(x=>x.id===id);if(!e)return;RID=id;$('rsSub')
  for(let r=1;r<=5;r++){const b=document.createElement('button');b.className='chip';b.style.cssText='flex:1;font-size:15px';b.textContent=fa(r)+' ★';b.onclick=()=>{e.r=r;save();RID=null;$('rateSheet').classList.add('hide');draw()};$('rsStars').appendChild(b)}
  $('rateSheet').classList.remove('hide')}
 $('rsSkip').onclick=()=>{RID=null;$('rateSheet').classList.add('hide')};
-function drawHome(){
- const t=new Date();t.setHours(12);
- const dm={};E.forEach(e=>{dm[e.d]=(dm[e.d]||0)+e.m});
- const d7=[];for(let j=6;j>=0;j--)d7.push(addD(t,-j));
- const v7=d7.map(d=>(dm[dk(d)]||0)/60);
- $('hc1').innerHTML=combo(d7.map(d=>fa(jal(d).d)),[{c:'#8FD3FE',v:v7}],v7,120);
- const w0=dk(addD(t,-day(t)));const wt=S.map(()=>0);E.forEach(e=>{if(e.d>=w0&&e.d<=dk(t))wt[e.s]+=e.m});
- const wmx=Math.max(60,...wt);
- $('hc2').innerHTML=S.map((s,i)=>bar('<i class="dot" style="background:'+s.c+'"></i>'+s.n,wt[i]?hm(wt[i]):'۰',wt[i]/wmx*100,s.c)).join('');
- const rated=E.filter(e=>e.r>0).slice(-8);
- const av=rated.length?rated.reduce((a,e)=>a+e.r,0)/rated.length:0;
- $('hq').textContent=rated.length?'میانگین '+fa(+av.toFixed(1))+' از ۵':'';
- $('hc3').innerHTML=rated.length?combo(rated.map(e=>fa(jal(pk(e.d)).d)),[{c:'#FFC9A6',v:rated.map(e=>e.r)}],rated.map(e=>e.r),120):'<div class="sub">هنوز مطالعه‌ای امتیاز نگرفته. بعد از هر ثبت، کیفیت را امتیاز بده.</div>';
- const k30=dk(addD(t,-29));const tq=TS.filter(x=>x.d>=k30);
- const n=tq.reduce((a,x)=>a+x.n,0),c=tq.reduce((a,x)=>a+x.c,0),w=tq.reduce((a,x)=>a+x.w,0);
- const acc=n?Math.round((c-w/3)/n*1000)/10:0;
- $('hc4').innerHTML=n?bar('درصد کلی ۳۰ روز اخیر',fa(acc)+'٪ ('+fa(n)+' تست)',Math.max(0,acc),'#8B5CF6'):'<div class="sub">تستی در ۳۰ روز اخیر ثبت نشده.</div>';
-}
 
 function smoothD(p){if(p.length<2)return '';let d='M'+p[0][0]+','+p[0][1];for(let i=0;i<p.length-1;i++){const p0=p[i-1]||p[i],p1=p[i],p2=p[i+1],p3=p[i+2]||p2;const c1x=p1[0]+(p2[0]-p0[0])/6,c1y=p1[1]+(p2[1]-p0[1])/6,c2x=p2[0]-(p3[0]-p1[0])/6,c2y=p2[1]-(p3[1]-p1[1])/6;d+=' C'+c1x+','+c1y+' '+c2x+','+c2y+' '+p2[0]+','+p2[1]}return d}
 function combo(cats,stacks,line,H0){
@@ -566,6 +564,31 @@ function lc(ser,lab,H,vl){
   if(n<=8)se.v.forEach((a,i)=>{if(a==null)return;s+='<circle cx="'+x(i)+'" cy="'+y(a)+'" r="3" fill="#0B1020" stroke="'+se.c+'" stroke-width="2"/>'+(vl?'<text x="'+x(i)+'" y="'+(y(a)-7)+'" font-size="9" text-anchor="middle" fill="#E6E9F5">'+(+a.toFixed(1))+'</text>':'')})});
  lab.forEach((t,i)=>{if(n<=8||i%2===(n-1)%2)s+='<text x="'+x(i)+'" y="'+(H-6)+'" font-size="8" text-anchor="middle" fill="#9AA3C7">'+t+'</text>'});
  return s+'</svg>';
+}
+
+function drawHome(){
+ const t=new Date();t.setHours(12);
+ const dm={};E.forEach(e=>{dm[e.d]=(dm[e.d]||0)+e.m});
+ const d7=[];for(let j=6;j>=0;j--)d7.push(addD(t,-j));
+ const v7=d7.map(d=>(dm[dk(d)]||0)/60);
+ $('hc1').innerHTML=combo(d7.map(d=>fa(jal(d).d)),[{c:'#8FD3FE',v:v7}],v7,140);
+ const w0=dk(addD(t,-day(t)));const wt=S.map(()=>0);E.forEach(e=>{if(e.d>=w0&&e.d<=dk(t))wt[e.s]+=e.m});
+ const wmx=Math.max(60,...wt);
+ $('hc2').innerHTML=S.map((s,i)=>bar('<i class="dot" style="background:'+s.c+'"></i>'+s.n,wt[i]?hm(wt[i]):'۰',wt[i]/wmx*100,s.c)).join('');
+ const rated=E.filter(e=>e.r>0).slice(-8);
+ const av=rated.length?rated.reduce((a,e)=>a+e.r,0)/rated.length:0;
+ $('hq').textContent=rated.length?'میانگین '+fa(+av.toFixed(1))+' از ۵':'';
+ $('hc3').innerHTML=rated.length?combo(rated.map(e=>fa(jal(pk(e.d)).d)),[{c:'#FFC9A6',v:rated.map(e=>e.r)}],rated.map(e=>e.r),120):'<div class="sub">هنوز مطالعه‌ای امتیاز نگرفته. بعد از هر ثبت، کیفیت را امتیاز بده.</div>';
+ const k30=dk(addD(t,-29));const tq=TS.filter(x=>x.d>=k30);
+ const n=tq.reduce((a,x)=>a+x.n,0),c=tq.reduce((a,x)=>a+x.c,0),w=tq.reduce((a,x)=>a+x.w,0);
+ const acc=n?Math.round((c-w/3)/n*1000)/10:0;
+ $('hc4').innerHTML=n?bar('درصد کلی ۳۰ روز اخیر',fa(acc)+'٪ ('+fa(n)+' تست)',Math.max(0,acc),'#8B5CF6'):'<div class="sub">تستی در ۳۰ روز اخیر ثبت نشده.</div>';
+ const days7=v7.filter(x=>x>0).length;
+ $('k1').textContent=hm(Math.round(v7.reduce((a,c)=>a+c,0)/7*60));
+ $('k2').textContent=fa(days7)+' از ۷';
+ let st2=0,dd=new Date(t);if(!(dm[dk(dd)]>0))dd=addD(dd,-1);while(dm[dk(dd)]>0){st2++;dd=addD(dd,-1)}
+ $('k3').textContent=fa(st2)+' روز';
+ $('k4').textContent=n?fa(acc)+'٪':'—';
 }
 
 let pd=0;
@@ -604,6 +627,39 @@ function drawStudyTab(){
 }
 document.querySelectorAll('#p0 .qb[data-h]').forEach(b=>b.onclick=()=>{const hd=[...document.querySelectorAll('#p0 h2')].find(x=>x.textContent.includes(b.dataset.h));if(hd)hd.scrollIntoView({behavior:'smooth',block:'start'})});
 
+let BZ=[];try{BZ=JSON.parse(localStorage.getItem('st_bz')||'[]')}catch(e){}
+function bzsave(){try{localStorage.setItem('st_bz',JSON.stringify(BZ))}catch(e){}}
+function ovl(e,a,b){const s0=e.t,s1=e.t+e.m/60,len=b>a?b-a:b+24-a;let ov=0;for(let k=-2;k<=2;k++){const A=a+24*k,B2=A+len;ov+=Math.max(0,Math.min(s1,B2)-Math.max(s0,A))}return ov}
+function drawBZ(){
+ const L=$('bzL');
+ if(!BZ.length){L.innerHTML='<div class="sub">هنوز بازه‌ای نساخته‌ای.</div>';return}
+ L.innerHTML=BZ.map((z,zi)=>{const tot=S.map(()=>0);E.forEach(e=>{if(e.t==null||!(e.m>0))return;tot[e.s]+=ovl(e,z.a,z.b)*60});
+  const sum=tot.reduce((x,c)=>x+c,0),mx=Math.max(60,...tot);
+  return '<div style="margin:10px 0;padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)"><div class="row" style="justify-content:space-between;margin:0"><b>'+z.n+' <span class="sub" style="margin:0">'+fmtT(z.a)+' تا '+fmtT(z.b)+'</span></b><button class="x" data-bz="'+zi+'">حذف</button></div>'+S.map((s,i)=>tot[i]>0?bar('<i class="dot" style="background:'+s.c+'"></i>'+s.n,hm(Math.round(tot[i])),tot[i]/mx*100,s.c):'').join('')+'<div class="it"><span>مجموع بازه</span><b>'+(sum?hm(Math.round(sum)):'۰')+'</b></div></div>'}).join('');
+ L.querySelectorAll('[data-bz]').forEach(b=>b.onclick=()=>{BZ.splice(+b.dataset.bz,1);bzsave();drawBZ()});
+}
+$('bzAdd').onclick=()=>{const a=hh($('bzA').value),b=hh($('bzB').value);if(a==null||b==null){$('bzM').textContent='ساعت شروع و پایان را وارد کن.';return}if(a===b){$('bzM').textContent='شروع و پایان نباید یکی باشند.';return}BZ.push({n:$('bzN').value.trim()||('بازه '+fa(BZ.length+1)),a:a,b:b});bzsave();$('bzM').textContent='';$('bzN').value='';drawBZ()};
+
+function dailyTrend(cats,v){
+ const n=v.length,W=340,L=30,R=12,T=22,Bm=28,H=220,bw=(W-L-R)/(n+1),X=i=>L+bw*(i+.5);
+ const run=v.map((_,i)=>{const w=v.slice(Math.max(0,i-6),i+1);return w.reduce((a,c)=>a+c,0)/w.length});
+ const fc=run[n-1];
+ const mx=Math.max(1,...v,fc)*1.25,Y=q=>T+(H-T-Bm)*(1-q/mx);
+ let s='<svg viewBox="0 0 '+W+' '+H+'" style="direction:ltr;overflow:visible"><defs><linearGradient id="dtB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A855F7"/><stop offset="1" stop-color="#6366F1" stop-opacity=".45"/></linearGradient><linearGradient id="dtA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22D3EE" stop-opacity=".35"/><stop offset="1" stop-color="#22D3EE" stop-opacity="0"/></linearGradient><filter id="dtg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+ for(let k=0;k<=4;k++){const q=mx*k/4,yy=Y(q);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+yy+'" y2="'+yy+'" stroke="#FFFFFF" opacity=".08"/><text x="'+(L-4)+'" y="'+(yy+3)+'" font-size="8" text-anchor="end" fill="#9B98C8">'+(+q.toFixed(1))+'</text>'}
+ v.forEach((q,i)=>{if(q>0)s+='<rect x="'+(X(i)-bw*.28)+'" y="'+Y(q)+'" width="'+(bw*.56)+'" height="'+(Y(0)-Y(q))+'" rx="3" fill="url(#dtB)" opacity=".85"/>'});
+ const dp=v.map((q,i)=>[X(i),Y(q)]);
+ s+='<path d="'+smoothD(dp)+' L'+X(n-1)+','+Y(0)+' L'+X(0)+','+Y(0)+' Z" fill="url(#dtA)"/>';
+ s+='<path d="'+smoothD(dp)+'" fill="none" stroke="#22D3EE" stroke-width="2.2" stroke-linecap="round" filter="url(#dtg)"/>';
+ const rp=run.map((q,i)=>[X(i),Y(q)]);
+ s+='<path d="'+smoothD(rp)+'" fill="none" stroke="#F472B6" stroke-width="2.5" stroke-linecap="round" filter="url(#dtg)"/>';
+ s+='<line x1="'+X(n-1)+'" y1="'+Y(run[n-1])+'" x2="'+X(n)+'" y2="'+Y(fc)+'" stroke="#F472B6" stroke-width="2.5" stroke-dasharray="5 4"/>';
+ s+='<circle cx="'+X(n)+'" cy="'+Y(fc)+'" r="5" fill="#F472B6" stroke="#fff" stroke-width="1.5"/><text x="'+X(n)+'" y="'+(Y(fc)-10)+'" font-size="9" font-weight="700" text-anchor="middle" fill="#F9A8D4">'+fa(+fc.toFixed(1))+'</text>';
+ v.forEach((q,i)=>{s+='<text x="'+X(i)+'" y="'+(H-10)+'" font-size="8" text-anchor="middle" fill="#9B98C8">'+cats[i]+'</text>'});
+ s+='<text x="'+X(n)+'" y="'+(H-10)+'" font-size="8" text-anchor="middle" fill="#F9A8D4">فردا</text>';
+ return s+'</svg><div class="sub" style="margin:6px 0 0">میانگین ۷ روز اخیر: '+fa(+fc.toFixed(1))+' ساعت — پیش‌بینی فردا همین عدد است.</div>';
+}
+
 let hdy=0;
 function drawHours(){
  const t=new Date();t.setHours(12);const k=dk(addD(t,-hdy));
@@ -629,18 +685,16 @@ function drawPie(){
  const tot=v.reduce((a,c)=>a+c,0);
  $('pl').textContent=pd===0?'امروز':pd===1?'دیروز':jl(d);$('pn').disabled=pd===0;
  if(!tot){$('pc').innerHTML='';$('pr').innerHTML='';$('pg').innerHTML='<div class="sub" style="text-align:center">در این روز مطالعه‌ای ثبت نشده.</div>';return}
- const cx=130,cy=130,R=100,r=66;
+ const cx=130,cy=130,R=118;
  const P=(ang,rad)=>[cx+rad*Math.cos(ang),cy+rad*Math.sin(ang)];
  let g='<svg viewBox="0 0 260 260" style="direction:ltr;overflow:visible"><defs><filter id="pg" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
- g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+((R+r)/2)+'" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="'+(R-r)+'"/>';
  let a0=-Math.PI/2;
  v.forEach((m,i)=>{if(!m)return;const f=m/tot,a1=a0+f*2*Math.PI;
-  if(f>=.9999){g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+((R+r)/2)+'" fill="none" stroke="'+S[i].c+'" stroke-width="'+(R-r)+'" filter="url(#pg)"/>'}
-  else{const p1=P(a0,R),p2=P(a1,R),q1=P(a1,r),q2=P(a0,r),lg=f>.5?1:0;
-   g+='<path d="M'+p1+' A'+R+' '+R+' 0 '+lg+' 1 '+p2+' L'+q1+' A'+r+' '+r+' 0 '+lg+' 0 '+q2+' Z" fill="'+S[i].c+'" stroke="#1E1B3B" stroke-width="2.5" filter="url(#pg)"/>'}
-  if(f>=.07){const tp=P((a0+a1)/2,(R+r)/2);g+='<text x="'+tp[0]+'" y="'+(tp[1]+4)+'" font-size="11" font-weight="700" text-anchor="middle" fill="#0B1020">'+fa(Math.round(f*100))+'٪</text>'}
+  if(f>=.9999){g+='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="'+S[i].c+'" filter="url(#pg)"/>'}
+  else{const p1=P(a0,R),p2=P(a1,R),lg=f>.5?1:0;
+   g+='<path d="M'+cx+','+cy+' L'+p1+' A'+R+' '+R+' 0 '+lg+' 1 '+p2+' Z" fill="'+S[i].c+'" stroke="#1E1B3B" stroke-width="2.5" filter="url(#pg)"/>'}
+  if(f>=.06){const tp=P((a0+a1)/2,R*.6);g+='<text x="'+tp[0]+'" y="'+(tp[1]+4)+'" font-size="12" font-weight="700" text-anchor="middle" fill="#0B1020">'+fa(Math.round(f*100))+'٪</text>'}
   a0=a1});
- g+='<text x="'+cx+'" y="'+(cy+2)+'" font-size="18" font-weight="700" text-anchor="middle" fill="#ECEBFF">'+fa(+(tot/60).toFixed(1))+' ساعت</text><text x="'+cx+'" y="'+(cy+20)+'" font-size="10" text-anchor="middle" fill="#9B98C8">مجموع روز</text>';
  $('pc').innerHTML=g+'</svg>';
  const C=2*Math.PI*24;
  $('pr').innerHTML=S.map((x,i)=>{if(!v[i])return'';const f=v[i]/tot;return'<div style="text-align:center;width:72px"><svg viewBox="0 0 64 64" width="60" height="60"><circle cx="32" cy="32" r="24" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="6"/><circle cx="32" cy="32" r="24" fill="none" stroke="'+x.c+'" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+(C*f)+' '+C+'" transform="rotate(-90 32 32)" style="filter:drop-shadow(0 0 4px '+x.c+')"/><text x="32" y="36" font-size="12" font-weight="700" text-anchor="middle" fill="#ECEBFF">'+fa(Math.round(f*100))+'٪</text></svg><div class="sub" style="margin:0;font-size:10px">'+x.n+'</div></div>'}).join('');
@@ -654,11 +708,11 @@ async function dl(name,text){
  try{if(window.claude&&claude.use){const d=await claude.use('downloads');if(d){await d.save({filename:name,data:blob});return}}}catch(e){}
  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
 }
-$('bk').onclick=()=>{dl('study-backup-'+dk(new Date())+'.json',JSON.stringify({v:2,e:E,n:N,p:P,c:C,g:G,s:SL,x:XM,t:TS}));$('bm').textContent='فایل پشتیبان آماده شد.'};
+$('bk').onclick=()=>{dl('study-backup-'+dk(new Date())+'.json',JSON.stringify({v:2,e:E,n:N,p:P,c:C,g:G,s:SL,x:XM,t:TS,z:BZ}));$('bm').textContent='فایل پشتیبان آماده شد.'};
 $('rs').onclick=()=>$('rf').click();
 $('rf').onchange=async ev=>{
  const f=ev.target.files[0];if(!f)return;
- try{const o=JSON.parse(await f.text());if(!Array.isArray(o.e)||!Array.isArray(o.n))throw 0;if(o.v!==2)mig(o.e,o.n);E=o.e;N=o.n;P=o.p||null;if(o.s){SL=o.s;slsave();sFill()}if(o.x){XM=o.x;xsave()}if(o.t){TS=o.t;tsave()}if(o.g)setG(o.g);if(o.c){C=o.c;cSync();try{localStorage.setItem('st_c',C)}catch(x){}}try{if(P)localStorage.setItem('st_p',P);else localStorage.removeItem('st_p')}catch(x){}try{localStorage.setItem('st_v','2')}catch(x){}save();draw();$('bm').textContent='بازیابی انجام شد.'}
+ try{const o=JSON.parse(await f.text());if(!Array.isArray(o.e)||!Array.isArray(o.n))throw 0;if(o.v!==2)mig(o.e,o.n);E=o.e;N=o.n;P=o.p||null;if(o.s){SL=o.s;slsave();sFill()}if(o.x){XM=o.x;xsave()}if(o.t){TS=o.t;tsave()}if(o.z){BZ=o.z;bzsave()}if(o.g)setG(o.g);if(o.c){C=o.c;cSync();try{localStorage.setItem('st_c',C)}catch(x){}}try{if(P)localStorage.setItem('st_p',P);else localStorage.removeItem('st_p')}catch(x){}try{localStorage.setItem('st_v','2')}catch(x){}save();draw();$('bm').textContent='بازیابی انجام شد.'}
  catch(e){$('bm').textContent='فایل معتبر نیست.'}
  ev.target.value='';
 };
